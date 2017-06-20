@@ -1,30 +1,11 @@
 # vue_components
 
-> A Vue.js project
+> 现在项目组优先使用vue，会尝试抽离应用级别的组件
 
-## Build Setup
+## 使用场景
 
-``` bash
-# install dependencies
-npm install
+vue 2.0
 
-# serve with hot reload at localhost:8080
-npm run dev
+axios 2.0
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
-```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+项目中使用elementUI，提取出来的组件会剔除elementUI，后期会加入ui实现，现阶段以功能实现和参考为主
