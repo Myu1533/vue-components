@@ -1,0 +1,21 @@
+{
+  "name": "vue_axios_drag_upload",
+  "version": "0.1.0",
+  "description": "vuejs width axios, drag & drop files to upload",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Flashylone/vue_components/tree/master/vue_axios_drag_upload"
+  },
+  "keywords": [
+    "vuejs",
+    "axios",
+    "drag",
+    "upload"
+  ],
+  "author": "Myu",
+  "license": "MIT"
+}
