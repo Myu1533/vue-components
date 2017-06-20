@@ -3,7 +3,7 @@
 
 ## Installation
 ```shell
-npm i element-upload
+npm i vue_axios_drag_upload
 ```
 
 ## Usage
