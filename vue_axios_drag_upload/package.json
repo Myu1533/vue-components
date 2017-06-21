@@ -1,6 +1,6 @@
 {
   "name": "vue_axios_drag_upload",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "vuejs width axios, drag & drop files to upload",
   "main": "index.js",
   "scripts": {
