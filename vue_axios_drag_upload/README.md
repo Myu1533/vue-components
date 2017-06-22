@@ -21,7 +21,9 @@ Vue.component('my-upload', MYupload)
 | 参数      | 说明          | 类型      | 可选值                           | 默认值  |
 |---------- |-------------- |---------- |--------------------------------  |-------- |
 | action | 必选参数, 上传的地址 | string | — | — |
-| maxList | 必选参数, 最大上传数量 | number | — | — |
+| maxList | 可选参数, 最大上传数量 | number | — | — |
+| checkType | 可选参数, 上传类型 | string | audio,image或者audio/mp3等 | - |
+| fileSizeLimit | 可选参数, 上传文件大小限制 | number | - | 默认单位（M） |
 
 # License
 [MIT](https://opensource.org/licenses/MIT)
