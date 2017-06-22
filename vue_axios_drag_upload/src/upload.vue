@@ -45,6 +45,12 @@
       },
       maxList: {
     		type: Number
+      },
+      checkType: {
+    		type: String
+      },
+      fileSizeLimit: {
+    		type: Number
       }
     },
     data(){
@@ -78,6 +84,7 @@
           if (!e) return;
           self.handleFileCheck(e.dataTransfer.files);
         });
+
       },
       handleInputChange(event){
         if (!event) return;
@@ -86,40 +93,49 @@
       handleFileCheck(data){
         let self = this;
         let files = [].slice.call(data);
+        let tmpFiles = [];
         let len = files.length;
 
-        if (len > self.maxList) {
-          self.$alert('不超过二十个文件');
+        if (self.maxList && len > self.maxList) {
+          alert('不超过'+ self.maxList +'个文件');
           return false;
         }
 
         try {
           files.forEach(function (item, index) {
-            if (!item.type.match('audio/mp3')) {
-              alert('只接收MP3文件');
-              throw new Error('上传文件错误');
-            } else {
-              if (self.files.length < self.maxList) {
-                let file = {
-                  uid: Date.now() + index,
-                  name: item.name,
-                  size: item.size,
-                  uploadStatus: 'ready',
-                  progress: 0,
-                  raw: item,
-                  cancelReq: null
-                };
-                self.files.push(file);
-              } else {
-                alert('上传列表已经达到上限')
-              }
 
+          	let fsize = (item.size/1024/1024).toFixed(1);
+          	if(self.fileSizeLimit && fsize > self.fileSizeLimit){
+              alert('只接收'+ self.fileSizeLimit + 'M 大小的文件;' + item.name + '文件大小为' + fsize + 'M');
+              throw new Error('上传文件错误');
             }
+
+            if (self.checkType && self.checkType !== '' && !item.type.match('' + self.checkType)) {
+              alert('只接收'+ self.checkType + '类型的文件;' + item.name + '文件类型错误');
+              throw new Error('上传文件错误');
+            }
+
+            if ( self.maxList && self.files.length >= self.maxList) {
+              alert('上传列表已经达到上限');
+              throw new Error('上传文件错误');
+            }
+
+            let file = {
+              uid: Date.now() + index,
+              name: item.name,
+              size: item.size,
+              uploadStatus: 'ready',
+              progress: 0,
+              raw: item,
+              cancelReq: null
+            };
+            tmpFiles.push(file);
           });
         } catch (err) {
-          self.files.splice(0, self.files.length);
+          tmpFiles.splice(0, self.files.length);
           return false;
         }
+        self.files = self.files.concat(tmpFiles);
         self.uploadFiles();
       },
       uploadFiles(){
