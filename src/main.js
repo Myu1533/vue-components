@@ -7,10 +7,12 @@ import App from './App'
 import router from './router'
 import upload from '../vue_axios_drag_upload/'
 import audio from '../vue2audio/'
+import ImgClip from '../vue2ImgClip/'
 
 Vue.use(VueAxios, axios)
 Vue.use(upload)
 Vue.use(audio)
+Vue.use(ImgClip)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
