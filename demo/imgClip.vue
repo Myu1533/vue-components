@@ -1,5 +1,5 @@
 <template>
-  <imgClip style="margin: 0 auto;" :imgURL="url"></imgClip>
+  <imgCrop style="margin: 0 auto;" :imgURL="url"></imgCrop>
 </template>
 <script>
 	export default {
