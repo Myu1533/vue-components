@@ -1,4 +1,4 @@
-# vue2imgClip,
+# vue2imgClip
 > 图片裁剪图片
 
 ## Installation
