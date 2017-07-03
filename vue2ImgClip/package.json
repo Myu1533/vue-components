@@ -1,0 +1,16 @@
+{
+  "name": "vue2imgclip",
+  "version": "0.0.1",
+  "description": "vue2 img clip",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vue2",
+    "img",
+    "clip"
+  ],
+  "author": "Myu",
+  "license": "MIT"
+}

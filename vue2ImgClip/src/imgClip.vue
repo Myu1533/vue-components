@@ -15,6 +15,8 @@
       </div>
       <span class="imgCrop-btn plus" @click="handlePlus">+</span>
     </div>
+    <button @click="drawImage">crop</button>
+    <canvas ref="c2" width="300" height="300">crop</canvas>
   </div>
 </template>
 <script>
@@ -40,8 +42,8 @@
         _this.cropBox = _this.$refs.cropBox;
         _this.ctx = _this.cropBox.getContext('2d');
 
-        _this.cropBox.width = _this.$refs.imgCrop.offsetWidth;
-        _this.cropBox.height = _this.$refs.imgCrop.offsetHeight;
+        _this.cropBox.width = 600;
+        _this.cropBox.height = 400;
 
         _this.drawClip();
         _this.moveCropImg();
@@ -90,7 +92,7 @@
         let ctx = _this.ctx,
           w = cropBox.width,
           h = cropBox.height,
-          cw = 280,
+          cw = 300,
           ch = 280;
         ctx.save();
         ctx.fillStyle = "black";
@@ -100,7 +102,7 @@
         ctx.save();
         ctx.globalCompositeOperation = "destination-out";// 设置裁剪模式
         ctx.beginPath();//
-        ctx.arc(w / 2, h / 2, cw / 2 - 4, 0, Math.PI * 2, false);
+        ctx.arc(w / 2, h / 2, cw / 2, 0, Math.PI * 2, false);
         ctx.fill();
         ctx.restore();
       },
@@ -169,7 +171,17 @@
         pointer.style.left = radio - 3.5 + '%';
         progress.style.width = radio + '%';
         cImg.style.transform = tmp[0] + 'scale(' + ( 1 + radio/100 ) + ')';
-        _this.renderToc2();
+      },
+      drawImage(){
+      	let _this = this;
+        let cImg = _this.$refs.cropImg;
+        let cvs = _this.$refs.cropBox;
+        let tmp = cImg.style.transform.split('scale')[1].split('(')[1].split(')')[0];
+        let c2 = _this.$refs.c2;
+        let ctx = c2.getContext('2d');
+      	ctx.drawImage(cImg,cImg.getBoundingClientRect().left - cvs.getBoundingClientRect().left - 150,cImg.getBoundingClientRect().top - cvs.getBoundingClientRect().top - 50,cImg.width * tmp, cImg.height * tmp);
+
+        _this.$emit('cropURL', cvs.toDataURL('image/jpeg'))
       }
     },
   }
