@@ -18,6 +18,7 @@
   </div>
 </template>
 <script>
+  import { audioLoading, aErr, aEnd, aTimeUpdate } from './utils'
 	export default {
 		name: 'audioplay',
     props: {
@@ -49,21 +50,9 @@
 
         audio.load();
         _this.aLoading = true;
-        audio.addEventListener('canplaythrough', e=>{
-          if(e) _this.aLoading = false;
-          if(_this.audioPlay){
-            _this.audioPlay();
-          }
-        });
-        audio.addEventListener('error', e=>{
-          if(e) _this.playerr = e;
-
-          _this.$emit('audio_err',e);
-        });
-        audio.addEventListener('ended', e=>{
-          if(e) progress.style.width = '0%';
-          _this.play = !_this.play;
-        });
+        audio.addEventListener('canplaythrough', audioLoading.bind(_this));
+        audio.addEventListener('error', aErr.bind(_this));
+        audio.addEventListener('ended', aEnd.bind(_this));
         setTimeout(function(){
           _this.aLoading = false;
         }, 100000);
@@ -77,23 +66,29 @@
 
       	if(_this.play){
       		audio.play();
-      		audio.addEventListener('timeupdate', e=>{
-      			let t = e.target;
-      			progress.style.width = (t.currentTime / t.duration) * 100 + '%';
-          });
+      		audio.addEventListener('timeupdate', aTimeUpdate.bind(this));
         }else{
       		audio.pause();
         }
       },
       playEnd(){
-        let _this = this;
-        let audio = _this.$refs.audio;
-        progress.style.width = '0%';
-        _this.play = false;
-        audio.pause();
-        audio.currentTime = 0;
+//        let _this = this;
+//        let audio = _this.$refs.audio;
+//        let progress = _this.$refs.progress;
+//
+//        _this.play = false;
+//        progress.style.width = '0%';
+//        audio.pause();
+//        audio.currentTime = 0;
+//        audio.removeEventListener('canplaythrough', audioLoading.bind(_this));
+//        audio.removeEventListener('error', aErr.bind(_this));
+//        audio.removeEventListener('ended', aEnd.bind(_this));
+//        audio.removeEventListener('timeupdate', aTimeUpdate.bind(_this));
       },
       closeAudio(){
+        let _this = this;
+        let audio = _this.$refs.audio;
+        audio.pause();
       	this.$emit('closeAudio');
       }
     }
