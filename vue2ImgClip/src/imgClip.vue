@@ -1,5 +1,6 @@
 <template>
   <div class="imgCrop" ref="imgCrop">
+    <canvas id="resultClip" ref="c2" width="300" height="300">crop</canvas>
     <div class="imgCropBox">
       <img :src="imgURL" ref="cropImg" style="transform: translate(0,0) scale(1)">
       <canvas ref="cropBox"></canvas>
@@ -14,9 +15,11 @@
         <span class="imgCrop-progress-pointer" ref="pointer"></span>
       </div>
       <span class="imgCrop-btn plus" @click="handlePlus">+</span>
+      <div class="mgCrop-emit-btns">
+        <button @click="clip">{{ confirmLabel ? confirmLabel : '确认'}}</button>
+        <button @click="close">{{ closeLabel ? closeLabel : '取消'}}</button>
+      </div>
     </div>
-    <button @click="drawImage">crop</button>
-    <canvas ref="c2" width="300" height="300">crop</canvas>
   </div>
 </template>
 <script>
@@ -25,6 +28,12 @@
     props: {
       imgURL: {
         type: String
+      },
+      confirmLabel:{
+      	type: String
+      },
+      closeLabel:{
+      	type: String
       }
     },
     data(){
@@ -172,7 +181,7 @@
         progress.style.width = radio + '%';
         cImg.style.transform = tmp[0] + 'scale(' + ( 1 + radio/100 ) + ')';
       },
-      drawImage(){
+      clip(){
       	let _this = this;
         let cImg = _this.$refs.cropImg;
         let cvs = _this.$refs.cropBox;
@@ -181,7 +190,10 @@
         let ctx = c2.getContext('2d');
       	ctx.drawImage(cImg,cImg.getBoundingClientRect().left - cvs.getBoundingClientRect().left - 150,cImg.getBoundingClientRect().top - cvs.getBoundingClientRect().top - 50,cImg.width * tmp, cImg.height * tmp);
 
-        _this.$emit('cropURL', cvs.toDataURL('image/jpeg'))
+        _this.$emit('cripURL', cvs.toDataURL('image/jpeg'))
+      },
+      close(){
+      	this.$emit('closeClip');
       }
     },
   }
@@ -198,9 +210,10 @@
     width: 600px;
     height: 400px;
     overflow: hidden;
+    background-color: #ffffff;
   }
 
-  .imgCropBox > img {
+  #resultClip {
     position: absolute;
     top: 0;
     left: 0;
