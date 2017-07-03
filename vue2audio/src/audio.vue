@@ -23,17 +23,23 @@
     props: {
 			url: {
 				type: String
+      },
+      autoPlay: {
+				type: Boolean
       }
     },
     data(){
 			return {
 				aLoading: false,
         playerr: '',
-				play: false
+        play: false
       }
     },
     mounted(){
     	this.initAudio();
+    },
+    beforeDestroy(){
+      this.playEnd();
     },
     methods: {
     	initAudio(){
@@ -45,6 +51,9 @@
         _this.aLoading = true;
         audio.addEventListener('canplaythrough', e=>{
           if(e) _this.aLoading = false;
+          if(_this.audioPlay){
+            _this.audioPlay();
+          }
         });
         audio.addEventListener('error', e=>{
           if(e) _this.playerr = e;
@@ -75,6 +84,14 @@
         }else{
       		audio.pause();
         }
+      },
+      playEnd(){
+        let _this = this;
+        let audio = _this.$refs.audio;
+        progress.style.width = '0%';
+        _this.play = false;
+        audio.pause();
+        audio.currentTime = 0;
       },
       closeAudio(){
       	this.$emit('closeAudio');
