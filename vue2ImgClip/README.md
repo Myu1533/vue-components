@@ -17,7 +17,7 @@ Vue.use(vue2imgclip)
 ### Attribute
 | 参数      | 说明          | 类型      | 可选值                           | 默认值  |
 |---------- |-------------- |---------- |--------------------------------  |-------- |
-| url | 必选参数, 裁切的图片的url | string | — | — |
+| imgURL | 必选参数, 裁切的图片的url | string | — | — |
 | confirmLabel | 可选参数, 确认按钮 | string | — | — |
 | closeLabel | 可选参数, 取消按钮 | string | — | - |
 

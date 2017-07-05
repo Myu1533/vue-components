@@ -16,8 +16,8 @@
       </div>
       <span class="imgCrop-btn plus" @click="handlePlus">+</span>
       <div class="mgCrop-emit-btns">
-        <button @click="clip">{{ confirmLabel ? confirmLabel : '确认'}}</button>
-        <button @click="close">{{ closeLabel ? closeLabel : '取消'}}</button>
+        <button @click="clip" class="btn-clip">{{ confirmLabel ? confirmLabel : '确认'}}</button>
+        <button @click="close" class="btn-close">{{ closeLabel ? closeLabel : '取消'}}</button>
       </div>
     </div>
   </div>
@@ -182,6 +182,9 @@
         cImg.style.transform = tmp[0] + 'scale(' + ( 1 + radio/100 ) + ')';
       },
       clip(){
+      	this._clip();
+      },
+      _clip(){
       	let _this = this;
         let cImg = _this.$refs.cropImg;
         let cvs = _this.$refs.cropBox;
@@ -268,5 +271,30 @@
     border-radius: 50%;
     border: 1px solid #E1E6EB;
     background-color: #ffffff;
+  }
+  .mgCrop-emit-btns{
+    margin-top: 50px;
+    height: 45px;
+    line-height: 45px;
+    text-align: right;
+  }
+  .btn-clip{
+    width: 93px;
+    height: 30px;
+    background-color: #20A0FF;
+    color: #ffffff;
+    border-radius: 3px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-close{
+    width: 73px;
+    height: 30px;
+    background-color: transparent;
+    border: 1px solid #C0CCDA;
+    color: #C0CCDA;
+    border-radius: 3px;
+    cursor: pointer;
   }
 </style>

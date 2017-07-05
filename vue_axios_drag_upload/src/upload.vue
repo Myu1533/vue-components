@@ -158,6 +158,7 @@
             }).then(response => {
               if (response && response.data.succeed) {
                 item.uploadStatus = 'success';
+                self.completeList.push(response.data);
                 self.countUploadSuccess++;
                 if (self.countUploadSuccess === self.files.length) {
                   self.btn_diabled = false;
