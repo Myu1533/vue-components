@@ -182,9 +182,6 @@
         cImg.style.transform = tmp[0] + 'scale(' + ( 1 + radio/100 ) + ')';
       },
       clip(){
-      	this._clip();
-      },
-      _clip(){
       	let _this = this;
         let cImg = _this.$refs.cropImg;
         let cvs = _this.$refs.cropBox;
@@ -192,8 +189,7 @@
         let c2 = _this.$refs.c2;
         let ctx = c2.getContext('2d');
       	ctx.drawImage(cImg,cImg.getBoundingClientRect().left - cvs.getBoundingClientRect().left - 150,cImg.getBoundingClientRect().top - cvs.getBoundingClientRect().top - 50,cImg.width * tmp, cImg.height * tmp);
-
-        _this.$emit('cripURL', cvs.toDataURL('image/jpeg'))
+        _this.$emit('cripURL', c2.toDataURL());
       },
       close(){
       	this.$emit('closeClip');
@@ -243,6 +239,7 @@
     border-radius: 4px;
     border: 1px solid #E1E6EB;
     color: #5F6369;
+    text-align: center;
   }
 
   .imgCrop-progress {
