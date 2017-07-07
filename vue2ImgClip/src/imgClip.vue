@@ -29,11 +29,11 @@
       imgURL: {
         type: String
       },
-      confirmLabel:{
-      	type: String
+      confirmLabel: {
+        type: String
       },
-      closeLabel:{
-      	type: String
+      closeLabel: {
+        type: String
       }
     },
     data(){
@@ -87,7 +87,7 @@
           let cY = parseInt(cImg.style.transform.split('px,')[1].split('px)')[0]);
           e.offsetX > mouseEvent.lastX ? cX = cX + 1.5 : cX = cX - 1.5;
           e.offsetY > mouseEvent.lastY ? cY = cY + 1.5 : cY = cY - 1.5;
-          cImg.style.transform = 'translate(' + cX + 'px,' + cY + 'px)' + 'scale' + tmp[1] ;
+          cImg.style.transform = 'translate(' + cX + 'px,' + cY + 'px)' + 'scale' + tmp[1];
           mouseEvent.lastX = e.offsetX;
           mouseEvent.lastY = e.offsetY;
           if (e.offsetX > e.target.offsetWidth * 0.95 || e.offsetX < 5 || e.offsetY > e.target.offsetHeight * 0.95 || e.offsetY < 5) {
@@ -124,8 +124,8 @@
           lastX = 0;
         pointer.addEventListener('mousedown', function (e) {
           e.preventDefault();
-          if( startX === 0) {
-            startX = Math.abs(e.pageX - e.target.offsetLeft );
+          if (startX === 0) {
+            startX = Math.abs(e.pageX - e.target.offsetLeft);
           }
           pointer.addEventListener('mousemove', handlePointer);
         });
@@ -156,14 +156,14 @@
         let pointer = _this.$refs.pointer;
         let progress = _this.$refs.progress;
         let cImg = _this.$refs.cropImg;
-        let radio = progress.offsetWidth/500 * 100;
-        if( progress.offsetWidth < 10 ){
+        let radio = progress.offsetWidth / 500 * 100;
+        if (progress.offsetWidth < 10) {
           radio = 1;
         }
         let tmp = cImg.style.transform.split('scale');
         pointer.style.left = radio - 1 + '%';
         progress.style.width = radio - 1 + '%';
-        cImg.style.transform = tmp[0] + 'scale(' + ( 1 + radio/100 ) + ')';
+        cImg.style.transform = tmp[0] + 'scale(' + ( 1 + radio / 100 ) + ')';
       },
       handlePlus(){
         let _this = this;
@@ -171,28 +171,37 @@
         let progress = _this.$refs.progress;
         let cImg = _this.$refs.cropImg;
         let radio = 10;
-        let r = progress.offsetWidth/500 * 100;
+        let r = progress.offsetWidth / 500 * 100;
         radio = radio + r;
-        if( progress.offsetWidth > 490 ){
+        if (progress.offsetWidth > 490) {
           radio = 100;
         }
         let tmp = cImg.style.transform.split('scale');
         pointer.style.left = radio - 3.5 + '%';
         progress.style.width = radio + '%';
-        cImg.style.transform = tmp[0] + 'scale(' + ( 1 + radio/100 ) + ')';
+        cImg.style.transform = tmp[0] + 'scale(' + ( 1 + radio / 100 ) + ')';
       },
       clip(){
-      	let _this = this;
+        let _this = this;
         let cImg = _this.$refs.cropImg;
         let cvs = _this.$refs.cropBox;
         let tmp = cImg.style.transform.split('scale')[1].split('(')[1].split(')')[0];
         let c2 = _this.$refs.c2;
         let ctx = c2.getContext('2d');
-      	ctx.drawImage(cImg,cImg.getBoundingClientRect().left - cvs.getBoundingClientRect().left - 150,cImg.getBoundingClientRect().top - cvs.getBoundingClientRect().top - 50,cImg.width * tmp, cImg.height * tmp);
-        _this.$emit('cripURL', c2.toDataURL());
+        ctx.drawImage(cImg, cImg.getBoundingClientRect().left - cvs.getBoundingClientRect().left - 150, cImg.getBoundingClientRect().top - cvs.getBoundingClientRect().top - 50, cImg.width * tmp, cImg.height * tmp);
+
+        let data = c2.toDataURL();
+        data = data.split(',')[1];
+        data = window.atob(data);
+        let ia = new Uint8Array(data.length);
+        for (let i = 0; i < data.length; i++) {
+          ia[i] = data.charCodeAt(i);
+        }
+        let blob = new Blob([ia], {type: "image/png"});
+        _this.$emit('cripURL', {blob: blob, base64: c2.toDataURL()});
       },
-      close(){
-      	this.$emit('closeClip');
+      close() {
+        this.$emit('closeClip');
       }
     },
   }
@@ -269,13 +278,15 @@
     border: 1px solid #E1E6EB;
     background-color: #ffffff;
   }
-  .mgCrop-emit-btns{
+
+  .mgCrop-emit-btns {
     margin-top: 50px;
     height: 45px;
     line-height: 45px;
     text-align: right;
   }
-  .btn-clip{
+
+  .btn-clip {
     width: 93px;
     height: 30px;
     background-color: #20A0FF;
@@ -285,7 +296,8 @@
     border: none;
     cursor: pointer;
   }
-  .btn-close{
+
+  .btn-close {
     width: 73px;
     height: 30px;
     background-color: transparent;
