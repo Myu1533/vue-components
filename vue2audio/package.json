@@ -1,6 +1,6 @@
 {
   "name": "vue2audio",
-  "version": "0.5.1",
+  "version": "0.5.8",
   "description": "vue2 audio",
   "main": "index.js",
   "scripts": {

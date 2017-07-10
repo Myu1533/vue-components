@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-  import { audioLoading, aErr, aEnd, aTimeUpdate } from './utils'
+  import { audioLoading, aErr, aEnd, aTimeUpdate } from './mdhh.js'
 	export default {
 		name: 'audioplay',
     props: {
