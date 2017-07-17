@@ -43,10 +43,10 @@
       }
     },
     mounted(){
-      this.init();
+      this.initImgClip();
     },
     methods: {
-      init(){
+      initImgClip(){
         let _this = this;
         _this.cropBox = _this.$refs.cropBox;
         _this.ctx = _this.cropBox.getContext('2d');
@@ -72,7 +72,7 @@
         cBox.addEventListener('mousedown', function (e) {
           e.preventDefault();
           mouseEvent.startX = mouseEvent.lastX = e.offsetX;
-          mouseEvent.startY = mouseEvent.lastX = e.offsetY;
+          mouseEvent.startY = mouseEvent.lastY = e.offsetY;
           cBox.addEventListener('mousemove', handleMouseMove);
         });
         cBox.addEventListener('mouseup', function (e) {
@@ -85,8 +85,10 @@
           let tmp = cImg.style.transform.split('scale');
           let cX = parseInt(cImg.style.transform.split('px,')[0].split('translate(')[1]);
           let cY = parseInt(cImg.style.transform.split('px,')[1].split('px)')[0]);
-          e.offsetX > mouseEvent.lastX ? cX = cX + 1.5 : cX = cX - 1.5;
-          e.offsetY > mouseEvent.lastY ? cY = cY + 1.5 : cY = cY - 1.5;
+          let delX = e.offsetX - mouseEvent.lastX;
+          let delY = e.offsetY - mouseEvent.lastY;
+          delX > 0 ? cX = cX + Math.abs(delX) : cX = cX - Math.abs(delX);
+          delY > 0 ? cY = cY + Math.abs(delY) : cY = cY - Math.abs(delY);
           cImg.style.transform = 'translate(' + cX + 'px,' + cY + 'px)' + 'scale' + tmp[1];
           mouseEvent.lastX = e.offsetX;
           mouseEvent.lastY = e.offsetY;
