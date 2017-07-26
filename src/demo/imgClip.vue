@@ -3,14 +3,14 @@
 </template>
 <script>
   import i from './107.jpg'
-	export default {
-		name: 'dImgClip',
-    data(){
-			return {
+  export default {
+    name: 'dImgClip',
+    data () {
+      return {
         url: i
       }
     }
-	}
+  }
 </script>
 <style>
 

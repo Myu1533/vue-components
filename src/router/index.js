@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from '@/components/Hello'
-import dragUpload from '../../demo/dragUpload.vue'
-import audioplay from '../../demo/audioplay.vue'
-import dImgClip from '../../demo/imgClip.vue'
+import dragUpload from '../demo/dragUpload.vue'
+import audioplay from '../demo/audioplay.vue'
+import dImgClip from '../demo/imgClip.vue'
 
 Vue.use(Router)
 

@@ -2,6 +2,8 @@
   <div class="hello">
     <ul>
       <li><router-link to="dragUpload">dragUpload</router-link></li>
+      <li><router-link to="audioplay">audioplay</router-link></li>
+      <li><router-link to="imgClip">dImgClip</router-link></li>
     </ul>
   </div>
 </template>

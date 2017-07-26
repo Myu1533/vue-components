@@ -4,8 +4,7 @@
 import imgClip from './src/imgClip.vue'
 
 imgClip.install = function (Vue) {
-  "use strict";
-  Vue.component(imgClip.name, imgClip);
-};
+  Vue.component(imgClip.name, imgClip)
+}
 
-export default imgClip;
+export default imgClip

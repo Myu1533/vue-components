@@ -5,9 +5,9 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import App from './App'
 import router from './router'
-import upload from '../vue_axios_drag_upload/'
-import audio from '../vue2audio/'
-import ImgClip from '../vue2ImgClip/'
+import upload from './components/vue_axios_drag_upload/'
+import audio from './components/vue2audio/'
+import ImgClip from './components/vue2ImgClip/'
 
 Vue.use(VueAxios, axios)
 Vue.use(upload)

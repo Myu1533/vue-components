@@ -2,7 +2,8 @@
   <div class="audio">
     <div class="audio-controlls">
       <div class="audio-play-btns">
-        <span class="audio-btn pause" @click="audioPlay" v-if="play"></span><span @click="audioPlay" class="audio-btn play" v-else></span>
+        <span class="audio-btn pause" @click="audioPlay" v-if="play"></span><span @click="audioPlay"
+                                                                                  class="audio-btn play" v-else></span>
         <div class="audio-progress outer">
           <div class="audio-progress inner" ref="progress">
             <div class="audio-progress pointer" ref="audio_pointer"></div>
@@ -19,59 +20,54 @@
 </template>
 <script>
   import { audioLoading, aErr, aEnd, aTimeUpdate } from './mdhh.js'
-	export default {
-		name: 'audioplay',
+  export default {
+    name: 'audioplay',
     props: {
-			url: {
-				type: String
+      url: {
+        type: String
       },
       autoPlay: {
-				type: Boolean
+        type: Boolean
       }
     },
-    data(){
-			return {
-				aLoading: false,
+    data () {
+      return {
+        aLoading: false,
         playerr: '',
         play: false
       }
     },
-    mounted(){
-    	this.initAudio();
+    mounted () {
+      this.initAudio()
     },
-    beforeDestroy(){
-      this.playEnd();
+    beforeDestroy () {
+      this.playEnd()
     },
     methods: {
-    	initAudio(){
-        let _this = this;
-        let audio = _this.$refs.audio;
-        let progress = _this.$refs.progress;
-
-        audio.load();
-        _this.aLoading = true;
-        audio.addEventListener('canplaythrough', audioLoading.bind(_this));
-        audio.addEventListener('error', aErr.bind(_this));
-        audio.addEventListener('ended', aEnd.bind(_this));
-        setTimeout(function(){
-          _this.aLoading = false;
-        }, 100000);
+      initAudio () {
+        let _this = this
+        let audio = _this.$refs.audio
+        audio.load()
+        _this.aLoading = true
+        audio.addEventListener('canplaythrough', audioLoading.bind(_this))
+        audio.addEventListener('error', aErr.bind(_this))
+        audio.addEventListener('ended', aEnd.bind(_this))
+        setTimeout(function () {
+          _this.aLoading = false
+        }, 100000)
       },
-      audioPlay(){
-      	let _this = this;
-      	let audio = _this.$refs.audio;
-      	let progress = _this.$refs.progress;
-
-      	_this.play = !_this.play;
-
-      	if(_this.play){
-      		audio.play();
-      		audio.addEventListener('timeupdate', aTimeUpdate.bind(this));
-        }else{
-      		audio.pause();
+      audioPlay () {
+        let _this = this
+        let audio = _this.$refs.audio
+        _this.play = !_this.play
+        if (_this.play) {
+          audio.play()
+          audio.addEventListener('timeupdate', aTimeUpdate.bind(this))
+        } else {
+          audio.pause()
         }
       },
-      playEnd(){
+      playEnd () {
 //        let _this = this;
 //        let audio = _this.$refs.audio;
 //        let progress = _this.$refs.progress;
@@ -85,22 +81,22 @@
 //        audio.removeEventListener('ended', aEnd.bind(_this));
 //        audio.removeEventListener('timeupdate', aTimeUpdate.bind(_this));
       },
-      closeAudio(){
-        let _this = this;
-        let audio = _this.$refs.audio;
-        audio.pause();
-      	this.$emit('closeAudio');
+      closeAudio () {
+        let _this = this
+        let audio = _this.$refs.audio
+        audio.pause()
+        this.$emit('closeAudio')
       }
     }
-	}
+  }
 </script>
 <style scoped>
-  .audio{
+  .audio {
     position: relative;
   }
 
   .audio-hide,
-  .audio-hide audio{
+  .audio-hide audio {
     position: absolute;
     left: 0;
     bottom: 0;
@@ -109,7 +105,7 @@
     overflow: hidden;
   }
 
-  .audio-controlls{
+  .audio-controlls {
     position: relative;
     display: inline-block;
     width: 171px;
@@ -118,24 +114,25 @@
     border-radius: 5px;
     overflow: hidden;
   }
+
   .audio-controlls-mask {
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
-    background-color: rgba(255,255,255,0.6);
+    background-color: rgba(255, 255, 255, 0.6);
     text-align: center;
     overflow: hidden;
     z-index: 999;
   }
 
-  .audio-btn{
+  .audio-btn {
     display: inline-block;
     cursor: pointer;
   }
 
-  .audio-btn.play{
+  .audio-btn.play {
     position: absolute;
     top: 6px;
     left: 6px;
@@ -146,36 +143,42 @@
     border-bottom: 6px solid transparent;
     vertical-align: middle;
   }
-  .audio-btn.pause{
+
+  .audio-btn.pause {
     position: absolute;
     top: 7px;
     left: 6px;
     width: 6px;
     height: 8px;
   }
+
   .audio-btn.pause::before,
-  .audio-btn.pause::after{
+  .audio-btn.pause::after {
     position: absolute;
     top: 0;
     height: 100%;
     content: '';
     border: 1px solid #8492A6;
   }
-  .audio-btn.pause::before{
+
+  .audio-btn.pause::before {
     left: 0;
   }
-  .audio-btn.pause::after{
+
+  .audio-btn.pause::after {
     right: 0;
   }
-  .audio-btn.close{
+
+  .audio-btn.close {
     position: absolute;
     top: 7px;
     right: 4px;
     width: 8px;
     height: 8px;
   }
+
   .audio-btn.close::before,
-  .audio-btn.close::after{
+  .audio-btn.close::after {
     position: absolute;
     top: 0;
     left: 0;
@@ -183,23 +186,27 @@
     content: '';
     border: 1px solid #8492A6;
   }
-  .audio-btn.close::before{
+
+  .audio-btn.close::before {
     transform: rotate(45deg);
   }
-  .audio-btn.close::after{
+
+  .audio-btn.close::after {
     transform: rotate(-45deg);
   }
-  .audio-progress.outer{
+
+  .audio-progress.outer {
     position: absolute;
     display: inline-block;
     top: 10px;
     left: 18px;
     width: 125px;
     height: 5px;
-    background-color: rgba(100,149,237,0.3);
+    background-color: rgba(100, 149, 237, 0.3);
     border-radius: 2px;
   }
-  .audio-progress.inner{
+
+  .audio-progress.inner {
     position: absolute;
     top: 0;
     left: 0;
@@ -208,7 +215,8 @@
     background-color: #6495ed;
     border-radius: 2px;
   }
-  .audio-progress.pointer{
+
+  .audio-progress.pointer {
     position: absolute;
     top: -4px;
     right: -4px;

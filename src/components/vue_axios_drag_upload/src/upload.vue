@@ -11,7 +11,7 @@
     <div id="out-input" class="out-input" v-if="files.length">
       <div class="out-input-item" v-for="(file,index) in files" :key="file.name">
         <span>{{index + 1}}.</span> <span class="out-input-item-name">{{file.name}} </span><span
-        class="file-size">{{file.size | fomatFileSize}}</span>
+        class="file-size">{{file.size | formatFileSize}}</span>
         <div class="upload-prograss">
           <div class="upload-prograss-outer">
             <div class="upload-prograss-inner" :style="'width:' + file.progress + '%'"></div>
@@ -36,24 +36,24 @@
   import uploadProgress from './upload-progress.vue'
   export default {
     name: 'MYupload',
-    mounted(){
-      this.initDrag();
+    mounted () {
+      this.initDrag()
     },
-    props:{
-    	action: {
-    		type: String
+    props: {
+      action: {
+        type: String
       },
       maxList: {
-    		type: Number
+        type: Number
       },
       checkType: {
-    		type: String
+        type: String
       },
       fileSizeLimit: {
-    		type: Number
+        type: Number
       }
     },
-    data(){
+    data () {
       return {
         files: [],
         btn_diabled: true,
@@ -61,65 +61,55 @@
       }
     },
     methods: {
-      initDrag(){
-        let self = this;
-        let BreakException = {};
-        let drop_area = document.querySelector("#drop_area");
-
+      initDrag () {
+        let self = this
+        let dropArea = document.querySelector('#drop_area')
         // 阻止默认的拖拽事件监听
         document.addEventListener('dragleave', function (e) {
-          e.preventDefault();
-        });
+          e.preventDefault()
+        })
         document.addEventListener('drop', function (e) {
-          e.preventDefault();
-        });
+          e.preventDefault()
+        })
         document.addEventListener('dragenter', function (e) {
-          e.preventDefault();
-        });
+          e.preventDefault()
+        })
         document.addEventListener('dragover', function (e) {
-          e.preventDefault();
-        });
-
-        drop_area.addEventListener('drop', function (e) {
-          if (!e) return;
-          self.handleFileCheck(e.dataTransfer.files);
-        });
-
+          e.preventDefault()
+        })
+        dropArea.addEventListener('drop', function (e) {
+          if (!e) return
+          self.handleFileCheck(e.dataTransfer.files)
+        })
       },
-      handleInputChange(event){
-        if (!event) return;
-        this.handleFileCheck(event.target.files);
+      handleInputChange (event) {
+        if (!event) return
+        this.handleFileCheck(event.target.files)
       },
-      handleFileCheck(data){
-        let self = this;
-        let files = [].slice.call(data);
-        let tmpFiles = [];
-        let len = files.length;
-
+      handleFileCheck (data) {
+        let self = this
+        let files = [].slice.call(data)
+        let tmpFiles = []
+        let len = files.length
         if (self.maxList && len > self.maxList) {
-          alert('不超过'+ self.maxList +'个文件');
-          return false;
+          alert('不超过' + self.maxList + '个文件')
+          return false
         }
-
         try {
           files.forEach(function (item, index) {
-
-          	let fsize = (item.size/1024/1024).toFixed(1);
-          	if(self.fileSizeLimit && fsize > self.fileSizeLimit){
-              alert('只接收'+ self.fileSizeLimit + 'M 大小的文件;' + item.name + '文件大小为' + fsize + 'M');
-              throw new Error('上传文件错误');
+            let fsize = (item.size / 1024 / 1024).toFixed(1)
+            if (self.fileSizeLimit && fsize > self.fileSizeLimit) {
+              alert('只接收' + self.fileSizeLimit + 'M 大小的文件;' + item.name + '文件大小为' + fsize + 'M')
+              throw new Error('上传文件错误')
             }
-
             if (self.checkType && self.checkType !== '' && !item.type.match('' + self.checkType)) {
-              alert('只接收'+ self.checkType + '类型的文件;' + item.name + '文件类型错误');
-              throw new Error('上传文件错误');
+              alert('只接收' + self.checkType + '类型的文件;' + item.name + '文件类型错误')
+              throw new Error('上传文件错误')
             }
-
-            if ( self.maxList && self.files.length >= self.maxList) {
-              alert('上传列表已经达到上限');
-              throw new Error('上传文件错误');
+            if (self.maxList && self.files.length >= self.maxList) {
+              alert('上传列表已经达到上限')
+              throw new Error('上传文件错误')
             }
-
             let file = {
               uid: Date.now() + index,
               name: item.name,
@@ -128,69 +118,65 @@
               progress: 0,
               raw: item,
               cancelReq: null
-            };
-            tmpFiles.push(file);
-          });
+            }
+            tmpFiles.push(file)
+          })
         } catch (err) {
-          tmpFiles.splice(0, self.files.length);
-          return false;
+          tmpFiles.splice(0, self.files.length)
+          return false
         }
-        self.files = self.files.concat(tmpFiles);
-        self.uploadFiles();
+        self.files = self.files.concat(tmpFiles)
+        self.uploadFiles()
       },
-      uploadFiles(){
-        let self = this;
-        let files = self.files;
-        files.forEach(function (item, index) {
+      uploadFiles () {
+        let self = this
+        let files = self.files
+        files.forEach(function (item) {
           if (item.uploadStatus === 'ready') {
-            let fd = new FormData();
-            fd.append('file', item.raw);
-            self.axios.post( self.action?self.action:'', fd, {
+            let fd = new FormData()
+            fd.append('file', item.raw)
+            self.axios.post(self.action ? self.action : '', fd, {
               onUploadProgress: function (progressEvent) {
                 if (progressEvent.loaded !== 0) {
-                  item.uploadStatus = 'uploading';
+                  item.uploadStatus = 'uploading'
                 }
-                item.progress = parseInt(progressEvent.loaded / progressEvent.total * 100);
+                item.progress = parseInt(progressEvent.loaded / progressEvent.total * 100)
               },
-              cancelToken: new self.axios.CancelToken(function executor(c) {
-                item.cancelReq = c;
+              cancelToken: new self.axios.CancelToken(function executor (c) {
+                item.cancelReq = c
               })
             }).then(response => {
               if (response && response.data.succeed) {
-                item.uploadStatus = 'success';
-                self.completeList.push(response.data);
-                self.countUploadSuccess++;
+                item.uploadStatus = 'success'
+                self.completeList.push(response.data)
+                self.countUploadSuccess++
                 if (self.countUploadSuccess === self.files.length) {
-                  self.btn_diabled = false;
+                  self.btn_diabled = false
                 }
               } else {
-                item.uploadStatus = 'failed';
+                item.uploadStatus = 'failed'
               }
-            }, response => {
-              item.uploadStatus = 'failed';
+            }, () => {
+              item.uploadStatus = 'failed'
             })
           }
         })
       },
-      handleCancelReq(){
-      	if(confirm('确定要删除上传的节目？')){
-          let arg = Array.prototype.slice.call(arguments);
-          this.files.splice(arg[1], 1);
-          arg[0].cancelReq();
+      handleCancelReq () {
+        if (confirm('确定要删除上传的节目？')) {
+          let arg = Array.prototype.slice.call(arguments)
+          this.files.splice(arg[1], 1)
+          arg[0].cancelReq()
         }
-      },
-      resetFileList(){
-        this.files.splice(0, this.files.length);
-        this.btn_diabled = true;
       }
     },
     components: {
       uploadProgress
     },
     filters: {
-      fomatFileSize(val){
-        let i = val / (1024 * 1024);
-        return i.toFixed(1) + 'M';
+      formatFileSize (val) {
+        let i = val / (1024 * 1024)
+        return i.toFixed(1) + 'M'
       }
     }
   }
@@ -312,7 +298,7 @@
   }
 
   .upload-prograss-inner {
-    width: 0%;
+    width: 0;
     height: 14px;
     background-color: #ff4d51;
     border-radius: 7px;
