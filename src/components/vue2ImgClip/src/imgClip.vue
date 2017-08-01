@@ -234,6 +234,7 @@
     position: relative;
     width: 600px;
     min-height: 400px;
+    text-align: center;
   }
 
   .imgCropBox {
