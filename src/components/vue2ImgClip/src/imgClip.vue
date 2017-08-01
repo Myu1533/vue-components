@@ -7,14 +7,14 @@
     </div>
 
     <div class="imgCrop-btns">
-      <span class="imgCrop-btn minus" @click="handleMinus">-</span>
+      <div class="imgCrop-btn minus" @click="handleMinus"><img src="./img/minus.svg" alt="minus"></div>
       <div class="imgCrop-progress outer">
-        <div class="imgCrop-progress inner" ref="progress">
+        <div class="imgCrop-progress inner" style="width: 50%;" ref="progress">
 
         </div>
-        <span class="imgCrop-progress-pointer" ref="pointer"></span>
+        <div class="imgCrop-progress-pointer" style="left: 49.6%;" ref="pointer"></div>
       </div>
-      <span class="imgCrop-btn plus" @click="handlePlus">+</span>
+      <div class="imgCrop-btn plus" @click="handlePlus"><img src="./img/plus.svg" alt="plus"></div>
       <div class="mgCrop-emit-btns">
         <button @click="clip" class="btn-clip">{{ confirmLabel ? confirmLabel : '确认'}}</button>
         <button @click="close" class="btn-close">{{ closeLabel ? closeLabel : '取消'}}</button>
@@ -99,10 +99,10 @@
         let ctx = _this.ctx
         let w = cropBox.width
         let h = cropBox.height
-        let cw = 300
+        let cw = 360
         ctx.save()
         ctx.fillStyle = 'black'
-        ctx.globalAlpha = 0.7
+        ctx.globalAlpha = 0.6
         ctx.fillRect(0, 0, cropBox.width, cropBox.height)// 设置canvas的长宽
         ctx.restore()
         ctx.save()
@@ -135,21 +135,24 @@
         })
         function handlePointer (e) {
           e.preventDefault()
-          if (e.target.offsetLeft < -9) {
-            pointer.style.left = -9 + 'px'
-          } else if (e.target.offsetLeft > 480) {
-            pointer.style.left = 480 + 'px'
+          let tmp = cImg.style.transform.split('scale')
+          let r = 1
+          if (e.target.offsetLeft < 0) {
+            pointer.style.left = '0.018%'
+            r = 0.5
+          } else if (e.target.offsetLeft > 500) {
+            pointer.style.left = '96.4%'
+            progress.style.width = '100%'
+            r = 1.5
           } else {
-            let tmp = cImg.style.transform.split('scale')
-            let r = 0
             pointer.style.left = e.pageX - startX + 'px'
             progress.style.width = pointer.offsetLeft / 500 * 100 + '%'
-            r = 1 + pointer.offsetLeft / 500
-            cImg.style.transform = tmp[0] +
-              'scale(' +
-              r +
-              ')'
+            r = 0.5 + (progress.offsetWidth / 250) * 0.5
           }
+          cImg.style.transform = tmp[0] +
+            'scale(' +
+            r +
+            ')'
         }
       },
       handleMinus () {
@@ -157,22 +160,20 @@
         let pointer = _this.$refs.pointer
         let progress = _this.$refs.progress
         let cImg = _this.$refs.cropImg
-        let radio = progress.offsetWidth / 500 // 比率
-        let r = 0
+        let rate = progress.offsetWidth / 250 // 比率
+        let r = 1
         let del = 9 / 500
         let tmp = cImg.style.transform.split('scale')
-        if (radio < 0.05) {
+        if (rate < 0.05) {
           pointer.style.left = del + '%'
           progress.style.width = 0 + '%'
-          r = 1
+          r = 0.5
+        } else if (rate > 2) {
+          r = 1.5
         } else {
-          pointer.style.left = (radio - 2 * del) * 100 + '%'
-          progress.style.width = (radio - del) * 100 + '%'
-          if (radio === 1) {
-            r = 2
-          } else {
-            r = 1 + radio
-          }
+          pointer.style.left = (rate - del) * 50 + '%'
+          progress.style.width = (rate - del) * 50 + '%'
+          r = 0.5 + 0.5 * rate
         }
 
         cImg.style.transform = tmp[0] +
@@ -185,23 +186,19 @@
         let pointer = _this.$refs.pointer
         let progress = _this.$refs.progress
         let cImg = _this.$refs.cropImg
-        let radio = progress.offsetWidth / 500 // 比率
+        let rate = progress.offsetWidth / 250 // 比率
         let tmp = cImg.style.transform.split('scale')
         let del = 9 / 500
-        let r = 0
+        let r = 1
 
-        if (radio > 0.95) {
-          pointer.style.left = (500 - 18) / 500 * 100 + '%'
+        if (rate > 1.95) {
+          pointer.style.left = 96.4 + '%'
           progress.style.width = 100 + '%'
-          r = 2
+          r = 1.5
         } else {
-          pointer.style.left = (radio + del) * 100 + '%'
-          progress.style.width = (radio + del) * 100 + '%'
-          if (radio === 2) {
-            r = 2
-          } else {
-            r = 1 + radio
-          }
+          pointer.style.left = (rate + del) * 50 + '%'
+          progress.style.width = (rate + del) * 50 + '%'
+          r = 0.5 + 0.5 * rate
         }
         cImg.style.transform = tmp[0] +
           'scale(' +
@@ -215,7 +212,7 @@
         let tmp = cImg.style.transform.split('scale')[1].split('(')[1].split(')')[0]
         let c2 = _this.$refs.c2
         let ctx = c2.getContext('2d')
-        ctx.drawImage(cImg, cImg.getBoundingClientRect().left - cvs.getBoundingClientRect().left - 150, cImg.getBoundingClientRect().top - cvs.getBoundingClientRect().top - 50, cImg.width * tmp, cImg.height * tmp)
+        ctx.drawImage(cImg, cImg.getBoundingClientRect().left - cvs.getBoundingClientRect().left - 180, cImg.getBoundingClientRect().top - cvs.getBoundingClientRect().top - 20, cImg.width * tmp, cImg.height * tmp)
         let data = c2.toDataURL()
         data = data.split(',')[1]
         data = window.atob(data)
@@ -266,15 +263,28 @@
   }
 
   .imgCrop-btn {
-    display: inline-block;
+    position: absolute;
     width: 36px;
     height: 36px;
-    font-size: 24px;
-    line-height: 36px;
+    font-size: 30px;
+    font-weight: 300;
     border-radius: 4px;
     border: 1px solid #E1E6EB;
     color: #5F6369;
     text-align: center;
+    cursor: pointer;
+  }
+
+  .minus {
+    top: 0;
+    left: 0;
+    line-height: 22px;
+  }
+
+  .plus {
+    top: 0;
+    right: 0;
+    line-height: 32px;
   }
 
   .imgCrop-progress {
@@ -284,7 +294,7 @@
     height: 6px;
     background-color: #F1F6FA;
     border-radius: 2px;
-    margin: 0 6px;
+    margin: -9px 6px;
   }
 
   .imgCrop-progress .inner {
