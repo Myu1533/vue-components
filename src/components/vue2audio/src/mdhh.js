@@ -1,6 +1,4 @@
-/**
- * Created by MDHH on 2017/7/3.
- */
+
 export const audioLoading = function (event) {
   if (event) this.aLoading = false
   if (this.audioPlay) {

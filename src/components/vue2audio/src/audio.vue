@@ -2,8 +2,8 @@
   <div class="audio">
     <div class="audio-controlls">
       <div class="audio-play-btns">
-        <span class="audio-btn pause" @click="audioPlay" v-if="play"></span><span @click="audioPlay"
-                                                                                  class="audio-btn play" v-else></span>
+        <span class="audio-btn pause" @click="audioPlay" v-if="play"></span>
+        <span @click="audioPlay" class="audio-btn play" v-else></span>
         <div class="audio-progress outer">
           <div class="audio-progress inner" ref="progress">
             <div class="audio-progress pointer" ref="audio_pointer"></div>
@@ -19,7 +19,27 @@
   </div>
 </template>
 <script>
-  import { audioLoading, aErr, aEnd, aTimeUpdate } from './mdhh.js'
+  //  import { audioLoading, aErr, aEnd, aTimeUpdate } from './mdhh.js'
+  function audioLoading (event) {
+    if (event) this.aLoading = false
+    if (this.audioPlay) {
+      this.audioPlay()
+    }
+  }
+  function aErr (event) {
+    if (event) this.playerr = event
+    this.$emit('audio_err', event)
+  }
+
+  function aEnd (event) {
+    if (event) this.$refs.progress.style.width = '0%'
+    this.play = !this.play
+  }
+
+  function aTimeUpdate (event) {
+    if (this.$refs.progress) this.$refs.progress.style.width = (event.target.currentTime / event.target.duration) * 100 + '%'
+  }
+
   export default {
     name: 'audioplay',
     props: {
@@ -68,18 +88,18 @@
         }
       },
       playEnd () {
-//        let _this = this;
-//        let audio = _this.$refs.audio;
-//        let progress = _this.$refs.progress;
-//
-//        _this.play = false;
-//        progress.style.width = '0%';
-//        audio.pause();
-//        audio.currentTime = 0;
-//        audio.removeEventListener('canplaythrough', audioLoading.bind(_this));
-//        audio.removeEventListener('error', aErr.bind(_this));
-//        audio.removeEventListener('ended', aEnd.bind(_this));
-//        audio.removeEventListener('timeupdate', aTimeUpdate.bind(_this));
+        let _this = this
+        let audio = _this.$refs.audio
+        let progress = _this.$refs.progress
+
+        _this.play = false
+        progress.style.width = '0%'
+        audio.pause()
+        audio.currentTime = 0
+        audio.removeEventListener('canplaythrough', audioLoading.bind(_this))
+        audio.removeEventListener('error', aErr.bind(_this))
+        audio.removeEventListener('ended', aEnd.bind(_this))
+        audio.removeEventListener('timeupdate', aTimeUpdate.bind(_this))
       },
       closeAudio () {
         let _this = this
