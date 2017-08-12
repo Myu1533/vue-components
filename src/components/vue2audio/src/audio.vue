@@ -2,16 +2,18 @@
   <div class="audio">
     <div class="audio-controlls">
       <div class="audio-play-btns">
-        <span class="audio-btn pause" @click="audioPlay" v-if="play"></span>
-        <span @click="audioPlay" class="audio-btn play" v-else></span>
+        <div class="audio-btn pause" @click="audioPlay" v-if="play"></div>
+        <div @click="audioPlay" class="audio-btn play" v-else></div>
         <div class="audio-progress outer">
           <div class="audio-progress inner" ref="progress">
-            <div class="audio-progress pointer" ref="audio_pointer"></div>
+            <div class="audio-progress pointer" ref="audio_pointer">
+              <div class="inner"></div>
+            </div>
           </div>
         </div>
-        <span class="audio-btn close" @click="closeAudio"></span>
+        <div class="audio-btn close" @click="closeAudio"></div>
       </div>
-      <div class="audio-controlls-mask" v-if="aLoading">{{playerr}}</div>
+      <div class="audio-controlls-mask" v-if="aLoading"></div>
     </div>
     <div class="audio-hide">
       <audio :src="url" preload controls ref="audio"></audio>
@@ -113,11 +115,19 @@
 <style scoped>
   .audio {
     position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .audio:after {
+    display: block;
+    content: '';
+    clear: both;
   }
 
   .audio-hide,
   .audio-hide audio {
-    position: absolute;
+    float: left;
     left: 0;
     bottom: 0;
     width: 1px;
@@ -127,11 +137,10 @@
 
   .audio-controlls {
     position: relative;
-    display: inline-block;
-    width: 171px;
-    height: 25px;
-    background-color: #F2F4F9;
-    border-radius: 5px;
+    float: left;
+    padding: 8px 8px;
+    background-color: #EEF1F6;
+    border-radius: 15px;
     overflow: hidden;
   }
 
@@ -147,28 +156,30 @@
     z-index: 999;
   }
 
+  .audio-play-btns:after {
+    display: block;
+    content: '';
+    clear: both;
+  }
+
   .audio-btn {
-    display: inline-block;
     cursor: pointer;
   }
 
   .audio-btn.play {
-    position: absolute;
-    top: 6px;
-    left: 6px;
+    float: left;
     width: 0;
     height: 0;
-    border-left: 6px solid #8492A6;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
+    border-left: 7px solid #8492A6;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
     vertical-align: middle;
   }
 
   .audio-btn.pause {
-    position: absolute;
-    top: 7px;
-    left: 6px;
-    width: 6px;
+    position: relative;
+    float: left;
+    width: 7px;
     height: 8px;
   }
 
@@ -179,6 +190,7 @@
     height: 100%;
     content: '';
     border: 1px solid #8492A6;
+    border-radius: 3px;
   }
 
   .audio-btn.pause::before {
@@ -190,9 +202,8 @@
   }
 
   .audio-btn.close {
-    position: absolute;
-    top: 7px;
-    right: 4px;
+    position: relative;
+    float: left;
     width: 8px;
     height: 8px;
   }
@@ -200,11 +211,12 @@
   .audio-btn.close::before,
   .audio-btn.close::after {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -1px;
+    left: 2px;
     height: 100%;
     content: '';
     border: 1px solid #8492A6;
+    border-radius: 3px;
   }
 
   .audio-btn.close::before {
@@ -216,14 +228,13 @@
   }
 
   .audio-progress.outer {
-    position: absolute;
-    display: inline-block;
-    top: 10px;
-    left: 18px;
+    position: relative;
+    float: left;
     width: 125px;
     height: 5px;
-    background-color: rgba(100, 149, 237, 0.3);
+    background-color: #B0DDFF;
     border-radius: 2px;
+    margin: 2px 8px;
   }
 
   .audio-progress.inner {
@@ -232,18 +243,32 @@
     left: 0;
     width: 0%;
     height: 5px;
-    background-color: #6495ed;
+    background-color: #20A0FF;
     border-radius: 2px;
   }
 
   .audio-progress.pointer {
     position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 4px;
+    top: -5px;
+    right: -9px;
+    width: 8px;
     height: 12px;
-    background-color: #107FD1;
-    border-radius: 2px;
-    box-shadow: inset 0 0 2px #ffffff;
+    padding: 1px;
+
+    border-radius: 5px;
+    filter: alpha(opacity=100) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#CEEDFF, endcolorstr=#78C2FD, gradientType=0);
+    background: -moz-linear-gradient(bottom, #CEEDFF, #78C2FD);
+    background: -ms-linear-gradient(bottom, #CEEDFF, #78C2FD);
+    background: -webkit-gradient(linear, 0 top, 0 bottom, from(#CEEDFF), to(#78C2FD));
+  }
+
+  .audio-progress.pointer .inner{
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    filter: alpha(opacity=100) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#41AEFF, endcolorstr=#107FD1, gradientType=1);
+    background: -moz-linear-gradient(bottom, #41AEFF, #107FD1);
+    background: -ms-linear-gradient(bottom, #41AEFF, #107FD1);
+    background: -webkit-gradient(linear, 0 top, 0 bottom, from(#41AEFF), to(#107FD1));
   }
 </style>

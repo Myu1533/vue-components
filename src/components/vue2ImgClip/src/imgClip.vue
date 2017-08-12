@@ -9,10 +9,10 @@
     <div class="imgCrop-btns">
       <div class="imgCrop-btn minus" @click="handleMinus"><img src="./img/minus.svg" alt="minus"></div>
       <div class="imgCrop-progress outer">
-        <div class="imgCrop-progress inner" style="width: 50%;" ref="progress">
+        <div class="imgCrop-progress inner" style="width: 250px;" ref="progress">
 
         </div>
-        <div class="imgCrop-progress-pointer" style="left: 49.6%;" ref="pointer"></div>
+        <div class="imgCrop-progress-pointer" style="left: 241px;" ref="pointer"></div>
       </div>
       <div class="imgCrop-btn plus" @click="handlePlus"><img src="./img/plus.svg" alt="plus"></div>
       <div class="mgCrop-emit-btns">
@@ -127,26 +127,27 @@
         })
         pointer.addEventListener('mouseup', function (e) {
           e.preventDefault()
+          handlePointer(e)
           pointer.removeEventListener('mousemove', handlePointer)
         })
         pointer.addEventListener('mouseleave', function (e) {
           e.preventDefault()
-          pointer.removeEventListener('mousemove', handlePointer)
+          e.target.removeEventListener('mousemove', handlePointer)
         })
         function handlePointer (e) {
           e.preventDefault()
           let tmp = cImg.style.transform.split('scale')
           let r = 1
           if (e.target.offsetLeft < 0) {
-            pointer.style.left = '0.018%'
+            pointer.style.left = '0px'
             r = 0.5
-          } else if (e.target.offsetLeft > 500) {
-            pointer.style.left = '96.4%'
-            progress.style.width = '100%'
+          } else if (e.target.offsetLeft > 482) {
+            pointer.style.left = '482px'
+            progress.style.width = '500px'
             r = 1.5
           } else {
             pointer.style.left = e.pageX - startX + 'px'
-            progress.style.width = pointer.offsetLeft / 500 * 100 + '%'
+            progress.style.width = pointer.offsetLeft + 9 + 'px'
             r = 0.5 + (progress.offsetWidth / 250) * 0.5
           }
           cImg.style.transform = tmp[0] +
@@ -162,17 +163,17 @@
         let cImg = _this.$refs.cropImg
         let rate = progress.offsetWidth / 250 // 比率
         let r = 1
-        let del = 9 / 500
+        let del = pointer.offsetLeft
         let tmp = cImg.style.transform.split('scale')
         if (rate < 0.05) {
-          pointer.style.left = del + '%'
-          progress.style.width = 0 + '%'
+          pointer.style.left = '0px'
+          progress.style.width = '0px'
           r = 0.5
         } else if (rate > 2) {
           r = 1.5
         } else {
-          pointer.style.left = (rate - del) * 50 + '%'
-          progress.style.width = (rate - del) * 50 + '%'
+          pointer.style.left = del - 9 + 'px'
+          progress.style.width = del + 'px'
           r = 0.5 + 0.5 * rate
         }
 
@@ -188,16 +189,16 @@
         let cImg = _this.$refs.cropImg
         let rate = progress.offsetWidth / 250 // 比率
         let tmp = cImg.style.transform.split('scale')
-        let del = 9 / 500
+        let del = pointer.offsetLeft
         let r = 1
 
         if (rate > 1.95) {
-          pointer.style.left = 96.4 + '%'
-          progress.style.width = 100 + '%'
+          pointer.style.left = '482px'
+          progress.style.width = '500px'
           r = 1.5
         } else {
-          pointer.style.left = (rate + del) * 50 + '%'
-          progress.style.width = (rate + del) * 50 + '%'
+          pointer.style.left = del + 9 + 'px'
+          progress.style.width = del + 18 + 'px'
           r = 0.5 + 0.5 * rate
         }
         cImg.style.transform = tmp[0] +
@@ -295,7 +296,7 @@
     height: 6px;
     background-color: #F1F6FA;
     border-radius: 2px;
-    margin: -9px 6px;
+    margin: -9px 0;
   }
 
   .imgCrop-progress .inner {
