@@ -161,7 +161,7 @@
         let pointer = _this.$refs.pointer
         let progress = _this.$refs.progress
         let cImg = _this.$refs.cropImg
-        let rate = progress.offsetWidth / 250 // 比率
+        let rate = (progress.offsetWidth - 18) / 250 // 比率
         let r = 1
         let del = pointer.offsetLeft
         let tmp = cImg.style.transform.split('scale')
@@ -187,7 +187,7 @@
         let pointer = _this.$refs.pointer
         let progress = _this.$refs.progress
         let cImg = _this.$refs.cropImg
-        let rate = progress.offsetWidth / 250 // 比率
+        let rate = (progress.offsetWidth + 18) / 250 // 比率
         let tmp = cImg.style.transform.split('scale')
         let del = pointer.offsetLeft
         let r = 1
